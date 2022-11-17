@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище QuestTxtModel1" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Items">
+    <Key>
+      <PropertyRef Name="itemID" />
+    </Key>
+    <Property Name="itemID" Type="int" Nullable="false" />
+    <Property Name="itemName" Type="text" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ItemsList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="saveID" Type="int" />
+    <Property Name="itemID" Type="int" />
+  </EntityType>
+  <EntityType Name="Levels">
+    <Key>
+      <PropertyRef Name="LevelID" />
+    </Key>
+    <Property Name="LevelID" Type="int" Nullable="false" />
+    <Property Name="textOFLevel" Type="text" />
+    <Property Name="FirstOptionID" Type="int" />
+    <Property Name="SecondOptionID" Type="int" />
+    <Property Name="ThirdOptionID" Type="int" />
+    <Property Name="riddleID" Type="int" />
+    <Property Name="isEnd" Type="bit" />
+    <Property Name="giveItemID" Type="int" />
+  </EntityType>
+  <EntityType Name="Options">
+    <Key>
+      <PropertyRef Name="OptionID" />
+    </Key>
+    <Property Name="OptionID" Type="int" Nullable="false" />
+    <Property Name="requiredItemID" Type="int" />
+    <Property Name="optionText" Type="text" />
+    <Property Name="nextLevelID" Type="int" />
+  </EntityType>
+  <EntityType Name="Riddles">
+    <Key>
+      <PropertyRef Name="riddleID" />
+    </Key>
+    <Property Name="riddleID" Type="int" Nullable="false" />
+    <Property Name="correctAnswer" Type="text" />
+    <Property Name="nextLevelID" Type="int" />
+    <Property Name="failureNextLevelID" Type="int" />
+  </EntityType>
+  <EntityType Name="Saves">
+    <Key>
+      <PropertyRef Name="Save_ID" />
+    </Key>
+    <Property Name="Save_ID" Type="int" Nullable="false" />
+    <Property Name="isCurrentSave" Type="bit" />
+    <Property Name="currentLevel" Type="int" />
+    <Property Name="itemsListID" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_ItemsList_Items">
+    <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
+    <End Role="ItemsList" Type="Self.ItemsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Items">
+        <PropertyRef Name="itemID" />
+      </Principal>
+      <Dependent Role="ItemsList">
+        <PropertyRef Name="itemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ItemsList_Saves">
+    <End Role="Saves" Type="Self.Saves" Multiplicity="0..1" />
+    <End Role="ItemsList" Type="Self.ItemsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Saves">
+        <PropertyRef Name="Save_ID" />
+      </Principal>
+      <Dependent Role="ItemsList">
+        <PropertyRef Name="saveID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Levels_Options">
+    <End Role="Options" Type="Self.Options" Multiplicity="0..1" />
+    <End Role="Levels" Type="Self.Levels" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Options">
+        <PropertyRef Name="OptionID" />
+      </Principal>
+      <Dependent Role="Levels">
+        <PropertyRef Name="FirstOptionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Levels_Options1">
+    <End Role="Options" Type="Self.Options" Multiplicity="0..1" />
+    <End Role="Levels" Type="Self.Levels" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Options">
+        <PropertyRef Name="OptionID" />
+      </Principal>
+      <Dependent Role="Levels">
+        <PropertyRef Name="SecondOptionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Levels_Options2">
+    <End Role="Options" Type="Self.Options" Multiplicity="0..1" />
+    <End Role="Levels" Type="Self.Levels" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Options">
+        <PropertyRef Name="OptionID" />
+      </Principal>
+      <Dependent Role="Levels">
+        <PropertyRef Name="ThirdOptionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Levels_Riddles">
+    <End Role="Riddles" Type="Self.Riddles" Multiplicity="0..1" />
+    <End Role="Levels" Type="Self.Levels" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Riddles">
+        <PropertyRef Name="riddleID" />
+      </Principal>
+      <Dependent Role="Levels">
+        <PropertyRef Name="riddleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Riddles_Levels">
+    <End Role="Levels" Type="Self.Levels" Multiplicity="0..1" />
+    <End Role="Riddles" Type="Self.Riddles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Levels">
+        <PropertyRef Name="LevelID" />
+      </Principal>
+      <Dependent Role="Riddles">
+        <PropertyRef Name="nextLevelID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Saves_Levels">
+    <End Role="Levels" Type="Self.Levels" Multiplicity="0..1" />
+    <End Role="Saves" Type="Self.Saves" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Levels">
+        <PropertyRef Name="LevelID" />
+      </Principal>
+      <Dependent Role="Saves">
+        <PropertyRef Name="currentLevel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище QuestTxtModel1Container">
+    <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ItemsList" EntityType="Self.ItemsList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Levels" EntityType="Self.Levels" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Options" EntityType="Self.Options" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Riddles" EntityType="Self.Riddles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Saves" EntityType="Self.Saves" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ItemsList_Items" Association="Self.FK_ItemsList_Items">
+      <End Role="Items" EntitySet="Items" />
+      <End Role="ItemsList" EntitySet="ItemsList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ItemsList_Saves" Association="Self.FK_ItemsList_Saves">
+      <End Role="Saves" EntitySet="Saves" />
+      <End Role="ItemsList" EntitySet="ItemsList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Levels_Options" Association="Self.FK_Levels_Options">
+      <End Role="Options" EntitySet="Options" />
+      <End Role="Levels" EntitySet="Levels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Levels_Options1" Association="Self.FK_Levels_Options1">
+      <End Role="Options" EntitySet="Options" />
+      <End Role="Levels" EntitySet="Levels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Levels_Options2" Association="Self.FK_Levels_Options2">
+      <End Role="Options" EntitySet="Options" />
+      <End Role="Levels" EntitySet="Levels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Levels_Riddles" Association="Self.FK_Levels_Riddles">
+      <End Role="Riddles" EntitySet="Riddles" />
+      <End Role="Levels" EntitySet="Levels" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Riddles_Levels" Association="Self.FK_Riddles_Levels">
+      <End Role="Levels" EntitySet="Levels" />
+      <End Role="Riddles" EntitySet="Riddles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Saves_Levels" Association="Self.FK_Saves_Levels">
+      <End Role="Levels" EntitySet="Levels" />
+      <End Role="Saves" EntitySet="Saves" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
